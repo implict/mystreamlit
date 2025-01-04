@@ -1,4 +1,4 @@
 streamlit
 matplotlib
-yfinance==0.2.4
-pandas==1.5.3
+yfinance
+pandas
