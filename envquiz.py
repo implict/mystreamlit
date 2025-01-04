@@ -70,7 +70,7 @@ if st.session_state.current_question < len(quiz_data):
                 st.session_state.score += 1
             st.session_state.current_question += 1
             st.session_state.user_answer = None
-            st.experimental_rerun()
+            st.rerun()
 
 # 퀴즈 종료 후 결과 표시
 if st.session_state.current_question == len(quiz_data):
@@ -79,4 +79,4 @@ if st.session_state.current_question == len(quiz_data):
         st.session_state.current_question = 0
         st.session_state.score = 0
         st.session_state.user_answer = None
-        st.experimental_rerun()
+        st.rerun()
