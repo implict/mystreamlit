@@ -16,21 +16,21 @@ df = pd.DataFrame(data)
 # 퀴즈 문제 정의
 quiz_data = [
     {
-        "question": "2020년 CO2 배출량은 얼마인가요?",
-        "options": ["34.5", "35.3", "35.7", "36.0"],
-        "correct": "35.3",
+        "question": "2010년부터 2020년까지 CO2 배출량의 전반적인 추세는?",
+        "options": ["증가", "감소", "변화 없음", "불규칙적"],
+        "correct": "증가",
         "data_key": "CO2_Emissions"
     },
     {
-        "question": "재생에너지 사용 비율이 가장 높은 해는?",
-        "options": ["2018", "2019", "2020", "2021"],
-        "correct": "2020",
+        "question": "재생에너지 사용 비율의 변화 패턴은?",
+        "options": ["선형적 증가", "지수적 증가", "변동 없음", "감소"],
+        "correct": "선형적 증가",
         "data_key": "Renewable_Energy"
     },
     {
-        "question": "산림 면적이 가장 넓었던 해는?",
-        "options": ["2010", "2015", "2018", "2020"],
-        "correct": "2010",
+        "question": "산림 면적의 변화 추세는?",
+        "options": ["급격한 감소", "점진적 감소", "증가", "변화 없음"],
+        "correct": "점진적 감소",
         "data_key": "Forest_Area"
     }
 ]
@@ -42,6 +42,7 @@ st.title("환경 데이터 시각화 퀴즈")
 if 'current_question' not in st.session_state:
     st.session_state.current_question = 0
     st.session_state.score = 0
+    st.session_state.user_answer = None
 
 # 현재 문제 표시
 if st.session_state.current_question < len(quiz_data):
@@ -58,12 +59,18 @@ if st.session_state.current_question < len(quiz_data):
     st.write(f"문제 {st.session_state.current_question + 1}: {question['question']}")
     
     # 사용자 응답
-    user_answer = st.radio("답을 선택하세요:", question['options'])
+    cols = st.columns(len(question['options']))
+    for idx, option in enumerate(question['options']):
+        if cols[idx].button(option):
+            st.session_state.user_answer = option
     
-    if st.button("다음 문제"):
-        if user_answer == question['correct']:
-            st.session_state.score += 1
-        st.session_state.current_question += 1
+    if st.session_state.user_answer:
+        if st.button("다음 문제"):
+            if st.session_state.user_answer == question['correct']:
+                st.session_state.score += 1
+            st.session_state.current_question += 1
+            st.session_state.user_answer = None
+            st.experimental_rerun()
 
 # 퀴즈 종료 후 결과 표시
 if st.session_state.current_question == len(quiz_data):
@@ -71,4 +78,5 @@ if st.session_state.current_question == len(quiz_data):
     if st.button("퀴즈 다시 시작"):
         st.session_state.current_question = 0
         st.session_state.score = 0
+        st.session_state.user_answer = None
         st.experimental_rerun()
